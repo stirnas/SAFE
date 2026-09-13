@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/stirnas/SAFE/protocol/evidence.schema.json",
+  "title": "SAFE Evidence Object",
+  "description": "A single piece of evidence (primary study, dataset, official statistic, etc.) with provenance and quality metadata.",
+  "type": "object",
+  "required": ["id", "title", "type", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable unique identifier for this evidence item."
+    },
+    "title": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["primary_study", "meta_analysis", "systematic_review", "official_statistic", "dataset", "preprint", "secondary_source", "other"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["url_or_doi", "venue"],
+      "properties": {
+        "url_or_doi": { "type": "string" },
+        "venue": { "type": "string" },
+        "authors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "publication_date": { "type": "string", "format": "date" },
+        "peer_reviewed": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "lineage_id": {
+      "type": "string",
+      "description": "Identifier of the independent primary lineage this evidence belongs to. Derivative works share the same lineage_id as their root."
+    },
+    "is_primary": {
+      "type": "boolean",
+      "description": "True if this is an original primary source, false if derivative/repost."
+    },
+    "quality_scores": {
+      "type": "object",
+      "properties": {
+        "relevance": { "type": "number", "minimum": 0, "maximum": 100 },
+        "methodological_rigour": { "type": "number", "minimum": 0, "maximum": 100 },
+        "sample_or_power": { "type": "number", "minimum": 0, "maximum": 100 }
+      },
+      "additionalProperties": false
+    },
+    "retracted_or_corrected": {
+      "type": "boolean",
+      "description": "True if a formal retraction or major correction exists."
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

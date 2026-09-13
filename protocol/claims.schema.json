@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/stirnas/SAFE/protocol/claims.schema.json",
+  "title": "SAFE Claim Object",
+  "description": "Machine-readable representation of a discrete claim extracted from model output, with full epistemic metadata.",
+  "type": "object",
+  "required": ["claim", "type", "status", "argument_strength", "fundamental_gate"],
+  "properties": {
+    "claim": {
+      "type": "string",
+      "description": "The discrete factual or normative assertion being evaluated."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["empirical_causal", "observational", "theoretical", "normative"],
+      "description": "Epistemic category of the claim."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["supported", "contested", "refuted", "unverified"],
+      "description": "Current overall status after scoring and gating."
+    },
+    "evidence_lineage_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Identifiers of independent primary evidence lineages (not derivative reposts)."
+    },
+    "contradictions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Identifiers or short descriptions of high-quality contradictory evidence."
+    },
+    "argument_strength": {
+      "type": "object",
+      "required": ["asc_score", "components", "version"],
+      "properties": {
+        "asc_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Composite Argument Strength Coefficient (0–100)."
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH"],
+          "description": "Qualitative confidence band derived from ASC and component variance."
+        },
+        "components": {
+          "type": "object",
+          "required": ["E_evidence_quality", "R_source_reliability", "I_independence", "P_replication", "C_contradiction_resistance", "T_temporal_stability", "F_fundamental_laws", "M_methodology"],
+          "properties": {
+            "E_evidence_quality": { "type": "number", "minimum": 0, "maximum": 100 },
+            "R_source_reliability": { "type": "number", "minimum": 0, "maximum": 100 },
+            "I_independence": { "type": "number", "minimum": 0, "maximum": 100 },
+            "P_replication": { "type": "number", "minimum": 0, "maximum": 100 },
+            "C_contradiction_resistance": { "type": "number", "minimum": 0, "maximum": 100 },
+            "T_temporal_stability": { "type": "number", "minimum": 0, "maximum": 100 },
+            "F_fundamental_laws": {
+              "type": "number",
+              "description": "Signed adjustment. Positive = supportive of fundamental consistency; negative = tension or conflict. Typical range approximately -20 to +20."
+            },
+            "M_methodology": { "type": "number", "minimum": 0, "maximum": 100 }
+          },
+          "additionalProperties": false
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the ASC aggregation function used (e.g. '1.0.0')."
+        },
+        "sensitivity_note": {
+          "type": "string",
+          "description": "Optional note on how the composite moves under alternative weightings."
+        }
+      },
+      "additionalProperties": false
+    },
+    "fundamental_gate": {
+      "type": "string",
+      "enum": ["unknown", "tension", "strong_conflict", "anomaly"],
+      "description": "Result of the Fundamental Knowledge Gate."
+    },
+    "reasoning_audit": {
+      "type": "object",
+      "properties": {
+        "fallacies_detected": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "single_source_dependence": { "type": "boolean" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ethical_audit": {
+      "type": "object",
+      "properties": {
+        "principles_checked": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tensions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bounded": {
+          "type": "boolean",
+          "const": true,
+          "description": "Ethical audit must never alter factual ASC components."
+        }
+      },
+      "additionalProperties": false
+    },
+    "uncertainty": {
+      "type": "object",
+      "properties": {
+        "disclosure": { "type": "string" },
+        "material": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "extracted_from": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "engine_version": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

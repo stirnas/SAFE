@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/stirnas/SAFE/protocol/audit.schema.json",
+  "title": "SAFE Audit Object",
+  "description": "Results of reasoning audit, fundamental gate, ethical audit, and information-contamination checks.",
+  "type": "object",
+  "properties": {
+    "reasoning_audit": {
+      "type": "object",
+      "properties": {
+        "fallacies_detected": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "correlation_causation",
+              "unsupported_assumption",
+              "circular_reasoning",
+              "extrapolation_beyond_evidence",
+              "cherry_picking",
+              "false_equivalence",
+              "appeal_to_authority",
+              "argument_from_ignorance",
+              "survivorship_bias",
+              "base_rate_neglect",
+              "hidden_normative_assumption",
+              "single_source_dependence",
+              "other"
+            ]
+          }
+        },
+        "single_source_dependence": { "type": "boolean" },
+        "logical_steps_reconstructed": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "fundamental_gate": {
+      "type": "object",
+      "required": ["result"],
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": ["unknown", "tension", "strong_conflict", "anomaly"]
+        },
+        "explanation": { "type": "string" },
+        "referenced_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ethical_audit": {
+      "type": "object",
+      "properties": {
+        "principles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "non_deception",
+              "respect_for_verifiable_evidence",
+              "proportionality",
+              "avoidance_of_gratuitous_harm",
+              "respect_for_autonomy",
+              "transparency_about_uncertainty"
+            ]
+          }
+        },
+        "tensions_found": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "factual_score_unaffected": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "contamination_signal": {
+      "type": "object",
+      "properties": {
+        "detected": { "type": "boolean" },
+        "confidence": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "description": { "type": "string" },
+        "does_not_alone_refute": {
+          "type": "boolean",
+          "const": true,
+          "description": "Contamination signal is never sufficient by itself to set status to refuted."
+        }
+      },
+      "additionalProperties": false
+    },
+    "engine_version": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
