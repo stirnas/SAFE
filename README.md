@@ -2,7 +2,7 @@
 Open, vendor-neutral protocol · Machine-readable scoring engine · Web runtime
 
 SAFE treats model output as claims, never as evidence.
-Every substantive claim is extracted, classified, provenance-tracked, scored, audited, and returned as a structured, auditable object that any model or human can consume.
+SAFE extracts every substantive claim, classifies it, tracks its provenance, scores it, audits it, and returns it as a structured, auditable object that any model or human can consume.
 
 Constitutional North Star
 Every design decision is evaluated against:
